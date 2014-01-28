@@ -1,0 +1,47 @@
+* { margin:0; padding:0; }
+body { overflow: hidden; background-color: transparent; }
+#background {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	z-index: -1;
+	background-color: black;
+}
+#backimg {
+	width: 100%;
+	height: 100%;
+	display: none;
+}
+#textInfo { margin:5px; font-family:Arial,sans; }
+#title { color:White; font-size:8pt; position:absolute; top: 5px; }
+#params1 { color:#ccc; font-size:8pt; line-height:8pt; position:absolute; top:calc(100% - 15px);}/*shuffle*/
+#params2 { color:#ccc; font-size:8pt; line-height:8pt; position:absolute; top: 5px; left:calc(100% * (6/7)); width: calc(14.3% - 10px); text-align: right;}/*sound*/
+#params3 { color:#ccc; font-size:8pt; line-height:8pt; position:absolute; top:calc(100% - 15px); left:calc(100% * (6/7)); width: calc(14.3% - 10px); text-align: right;}/*background*/
+#params4 { color:#aaa; font-size:8pt; line-height:8pt; position:absolute; top:calc(100% - 15px); left:calc(100% * (1/7)); width: calc(14.3% - 10px); text-align: center; }/*info1*/
+#params5 { color:#aaa; font-size:8pt; line-height:8pt; position:absolute; top:calc(100% - 15px); left:calc(100% * (2/7)); width: calc(14.3% - 10px); text-align: center; }/*info2*/
+#params6 { color:#aaa; font-size:8pt; line-height:8pt; position:absolute; top:calc(100% - 15px); left:calc(100% * (3/7)); width: calc(14.3% - 10px); text-align: center; }/*info3*/
+#params7 { color:#aaa; font-size:8pt; line-height:8pt; position:absolute; top:calc(100% - 15px); left:calc(100% * (4/7)); width: calc(14.3% - 10px); text-align: center; }/*info4*/
+#params8 { color:#aaa; font-size:8pt; line-height:8pt; position:absolute; top:calc(100% - 15px); left:calc(100% * (5/7)); width: calc(14.3% - 10px); text-align: center; }/*info5*/
+#credits { margin:10px; z-index:10; font-family:Arial,sans; font-size:8pt; color:#ccc; }
+a { color:#ccc; cursor:pointer; }
+button { pointer-events:all; padding: 5px; background-color:rgba(255,255,255,0.5); border: 1px; margin-top:5px; outline:none; }
+div,canvas { pointer-events: none; }
+
+#touchSurface {
+	pointer-events: all;
+	width:100%; height:100%;
+}
+.slider {
+	pointer-events: all;
+	width:14.3%; height:40px;
+	position:absolute; top: calc(100% - 42px); left: 14.3%;
+	border:0px dashed rgba(255,255,255,0.5);
+    /*visibility:collapse;*/
+}
+.thumb {
+	width:5px; height:5px;
+	position:relative; top:calc(50% - 2px); right: calc(-50% + 2.5px);
+	background-color:#ccc;
+}

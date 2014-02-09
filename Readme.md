@@ -1,3 +1,3 @@
-Beta version, new version coming soon.
-
-You must upload AVVX to a server, or run an embeddable web server locally such as Mongoose: https://code.google.com/p/mongoose/
+AVVX by Nuno Correia with Jari Kleimola
+Information / instructions: www.avvx.org
+released under MIT license http://opensource.org/licenses/MIT

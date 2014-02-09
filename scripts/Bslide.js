@@ -10,7 +10,7 @@
 
 	// -- runtime
 	var nSlides = 20;
-	var counterMax = 250;
+	var counterMax = 500;
 	var counter = 0;
 	var posX = posY = 0;
 
@@ -74,12 +74,12 @@
 		if (slideset1.children.length == nSlides)
 		{
 			containerUpdate(slideset1, speed1, angle1);
-			console.log("set1");
+			// console.log("set1");
 		}
 		if (slideset2.children.length == nSlides)
 		{
 			containerUpdate(slideset2, speed2, angle2);
-			console.log("set2");
+			// console.log("set2");
 		}
 		counter++;
 		if (counterMax % 2 != 0)
@@ -126,31 +126,6 @@
 	{
 		for (var i = 0; i < nSlides; i++)
 		{
-			// -- position
-			switch (sDirection)
-			{
-				case 1:// down
-					posX = Math.random() * window.innerWidth - (window.innerWidth-800)/2;
-					posY = -(window.innerHeight + Math.random() * window.innerHeight);
-					directionText = "down";
-					break;
-				case 2:// up
-					posX = Math.random() * window.innerWidth - (window.innerWidth-800)/2;;
-					posY = window.innerHeight + Math.random() * window.innerHeight;
-					directionText = "up";					
-					break;
-				case 3:// left
-					posX = window.innerWidth + Math.random() * window.innerWidth;
-					posY = Math.random() * window.innerHeight-(window.innerHeight-600)/2;;
-					directionText = "left";
-					break;
-				case 4:// right
-					posX = -(window.innerWidth + Math.random() * window.innerWidth);
-					posY = Math.random() * window.innerHeight-(window.innerHeight-600)/2;;
-					directionText = "right";
-					break;
-			}
-
 			// -- SVG
 			var svgdoc;
 			if (self.shuffle)
@@ -167,6 +142,34 @@
 			var svg = document.importNode(svgdoc.documentElement, true);
 			svg.style.width = w;
 			svg.style.height = h;
+			var svgwidth = parseInt(svg.getAttribute("width"));
+			var svgheight = parseInt(svg.getAttribute("height"));
+
+			// -- position
+			switch (sDirection)
+			{
+				case 1:// down
+					posX = Math.random() * window.innerWidth - (window.innerWidth - svgwidth) / 2;
+					posY = -(window.innerHeight * 5 + Math.random() * window.innerHeight * 5);
+					directionText = "down";
+					break;
+				case 2:// up
+					posX = Math.random() * window.innerWidth - (window.innerWidth - svgwidth) / 2;;
+					posY = window.innerHeight * 5 + Math.random() * window.innerHeight * 5;
+					directionText = "up";
+					break;
+				case 3:// left
+					posX = window.innerWidth * 5 + Math.random() * window.innerWidth * 3;
+					posY = Math.random() * window.innerHeight - (window.innerHeight - svgheight) / 2;;
+					directionText = "left";
+					break;
+				case 4:// right
+					posX = -(window.innerWidth * 5 + Math.random() * window.innerWidth * 3);
+					posY = Math.random() * window.innerHeight - (window.innerHeight - svgheight) / 2;;
+					directionText = "right";
+					break;
+			}
+
 			var svgroot = self.getFirstElement(svg);
 			svgroot.setAttribute("transform", "translate(" + posX + "," + posY + ") rotate(0) scale(0)");
 
@@ -179,6 +182,7 @@
 			if (container.children.length == nSlides)
 				container.removeChild(container.children[0]);
 			container.appendChild(slide);
+			self.updateLayers();
 
 			slide.x = posX;
 			slide.y = posY;
@@ -237,7 +241,7 @@
 			// slider #3
 			if (param.id == "s3")
 			{
-				var value = Math.round(50*(param.value/100))+10;
+				var value = Math.round(20*(param.value/100))+10;
 				if (value != maxSpeed) maxSpeed = value;
 				else return false;	// no need to change text
 			}

@@ -42,10 +42,13 @@
 
 	var defaultSettings = function (index)
 	{
-		var adjustedCenterX = window.innerWidth/2-(window.innerWidth-800)/2;
+		var w = emptyMC[index].svgwidth;
+		var h = emptyMC[index].svgheight;
+		var adjustedCenterX = window.innerWidth/2-(window.innerWidth-w)/2;
 		var x = adjustedCenterX + (Math.random() * 2-1)*distCenter;
-		var adjustedCenterY = window.innerHeight/2-(window.innerHeight-600)/2;
-		var y = adjustedCenterY + (Math.random() * 2-1)*distCenter;
+		var adjustedCenterY = window.innerHeight/2-(window.innerHeight-h)/2;
+		var y = adjustedCenterY + (Math.random() * 2 - 1) * distCenter;
+
 		var svg = emptyMC[index].children[0];
 		self.getFirstElement(svg).setAttribute("transform", "translate(" + x + "," + y + ") rotate(0) scale(0)");
 		emptyMC[index].scaleX = 100;
@@ -115,11 +118,14 @@
 		var svg = document.importNode(svgdoc.documentElement, true);
 		svg.style.width = self.stageW;
 		svg.style.height = self.stageH;
+		emptyMC[indexMC].svgwidth = parseInt(svg.getAttribute("width"));
+		emptyMC[indexMC].svgheight = parseInt(svg.getAttribute("height"));
 
 		if (emptyMC[indexMC].children.length > 0) // && emptyMC[indexMC].scaleX <= 0.1)
 			emptyMC[indexMC].removeChild(emptyMC[indexMC].children[0]);
 
 		emptyMC[indexMC].appendChild(svg);
+		self.updateLayers();
 		defaultSettings(indexMC);
 
 		indexMC++;

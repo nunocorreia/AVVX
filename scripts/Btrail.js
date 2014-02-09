@@ -33,6 +33,7 @@
 		posX = Math.random() * (this.stageW / 2) + this.stageW / 4;
 		posY = Math.random() * (this.stageH / 2) + this.stageH / 4;
 	};
+
 	this.exit = function ()
 	{
 		document.body.removeChild(container);
@@ -69,7 +70,11 @@
 			trailer.style.left = 0;
 			trailer.style.top = 0;
 			
-			var xform = "translate(" + posX + " " + posY + ")";
+			console.log(parseInt(trailer.getAttribute("width")));
+
+			var newPosX=posX - (800 - parseInt(trailer.getAttribute("width")))/2
+			var newPosY=posY - (600 - parseInt(trailer.getAttribute("height")))/2
+			var xform = "translate(" + newPosX + " " + newPosY + ")";
 			xform += " scale(" + (size + this.soundLevel) + ")";
 			xform += " rotate(" + angleSum + ")";
 			var svgroot = this.getFirstElement(trailer);
@@ -77,7 +82,9 @@
 			trailer.style.opacity = falpha;
 			
 			container.appendChild(trailer);
+			this.updateLayers();
 			trailers.push(trailer);
+			//console.log(trailer.getAttribute("width"));
 
 			if (++depth >= depthMax)
 				depth = 0;
@@ -113,7 +120,7 @@
 			case 86: spacing += 1; break; // v
 			case 67: if (spacing > 0) spacing -= 1; break; // c
 			case 78: rate += 1; break; // n
-			case 66: if (rate > 1) depthMax -= 1; break; // b
+			case 66: if (rate > 1) rate -= 1; break; // b
 			default: return false;
 		}
 		else if (type == "slider")

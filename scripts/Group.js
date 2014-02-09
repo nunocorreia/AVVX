@@ -6,7 +6,7 @@ var Group = function (xmlgroup, onloaded)
 	var self = this;
 
 	var id = xmlgroup.getAttribute("id");
-	var author = xmlgroup.getAttribute("author");
+	this.author = xmlgroup.getAttribute("author");
 	var url = xmlgroup.getAttribute("url");
 	self.background = xmlgroup.getAttribute("bgimage");
 

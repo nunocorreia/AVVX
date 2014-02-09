@@ -32,8 +32,10 @@ Behavior.prototype =
 		this.textInfo.init(this.group, this.shuffle, false, this.title);
 		this.updateText();
 
-		document.addEventListener("keydown", this.key.bind(this), false);
-		window.addEventListener("resize", this.resize.bind(this));
+		this.cbKey = this.key.bind(this);
+		this.cbResize = this.resize.bind(this);
+		document.addEventListener("keydown", this.cbKey, false);
+		window.addEventListener("resize", this.cbResize);
 
 		var self = this;
 		var update = function ()
@@ -48,9 +50,20 @@ Behavior.prototype =
 	removeHandler: function ()
 	{
 		this.running = false;
-		window.removeEventListener("resize", this.resize);
-		document.removeEventListener("keydown", this.key);
+		window.removeEventListener("resize", this.cbResize);
+		document.removeEventListener("keydown", this.cbKey);
 		this.exit();
+	},
+
+	setCredits: function (visualCredits, soundCredits)
+	{
+		this.textInfo.setCredits(visualCredits, soundCredits);
+	},
+	updateLayers: function ()
+	{
+		var textInfo = document.getElementById("topLayer");
+		document.body.removeChild(textInfo);
+		document.body.appendChild(textInfo);
 	},
 
 	getSoundInfo: function (peakLevel) { this.soundLevel = peakLevel; },

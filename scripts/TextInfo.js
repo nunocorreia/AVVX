@@ -8,9 +8,11 @@ var TextInfo = function (title)
 	this.init = function (group, shuffle, mic, title)
 	{
 		if (!title) title = self.title;
-		self.info.children[0].innerHTML = title + " " + group;
+		var groupString;
+		if(group<10) groupString = "0"+group; else groupString=group;
+		self.info.children[0].innerHTML = title + " " + groupString;
 		self.info.children[1].innerHTML = "shuffle: " + shuffle;
-		self.info.children[2].innerHTML = "mic: " + mic;
+		self.info.children[2].innerHTML = "mic: ";
 		self.info.children[3].innerHTML = "back:";
 		self.info.children[4].innerHTML = "";
 		self.info.children[5].innerHTML = "";
@@ -19,11 +21,20 @@ var TextInfo = function (title)
 		self.info.children[8].innerHTML = "";
 	};
 
+	this.setCredits = function (visualCredits, soundCredits)
+	{
+		self.visualCredits = visualCredits;
+		self.soundCredits = soundCredits;
+		if (visualCredits) self.info.children[0].innerHTML += "<br/>" + "by:" + visualCredits;
+		if (soundCredits) self.info.children[2].innerHTML += "<br/>" + "by:"+ soundCredits;
+	};
+
 	this.changeTextA = function (shuffle, mic,background)
 	{
 		self.info.children[1].innerHTML = "shuffle: " + shuffle;
 		self.info.children[2].innerHTML = "mic: " + mic;
 		self.info.children[3].innerHTML = "back:"+background;
+		if (self.soundCredits) self.info.children[2].innerHTML += "<br/>" + "by:" + self.soundCredits;
 	};
 
 	this.changeTextB = function (params)

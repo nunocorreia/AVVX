@@ -10,8 +10,18 @@ var AVVX = function ()
 	var isiPad;
 	var touchUI;
 	var audioEngine;
+	var self = this;
 
-	var imageGroup1 = imageGroup2 = 0;
+	// command mapping
+	// 08 = BACKSPACE (not used: sound is now toggled with ENTER)
+	// 13 = ENTER
+	// 16 = SHIFT
+	// 17 = CONTROL (can't use TAB since it jumps between content and address bar)
+	// 32 = SPACE
+	// 77 = M
+	var commands = { 8: 'obsolete', 13: 'sound', 16: 'background', 17: 'shuffle', 32: 'textinfo', 77: 'mic' };
+
+	this.imageGroup1 = this.imageGroup2 = 0;
 	var behaviorIndex = -1;
 	var shuffle = false;
 	var bgimage;
@@ -20,12 +30,17 @@ var AVVX = function ()
 	var soundPlaying = false;
 	var bMic = false;
 
-	// https://github.com/mrdoob/three.js/wiki/How-to-run-things-locally
-	// http://stackoverflow.com/questions/7981100/how-do-i-dynamically-insert-an-svg-image-into-html
-	var refreshXML = function (newindex)
+	this.refreshXML = function (newindex)
 	{
-		var group = imageGroup1 + imageGroup2;
-		if (group >= groups.length) return;
+		var group = self.imageGroup1 + self.imageGroup2;
+		console.log("gr1:"+self.imageGroup1/10+", gr2:"+self.imageGroup2 +", "+group);
+		//if (group >= groups.length) return;
+		if (group >= groups.length){
+			group=groups.length-1;
+			self.imageGroup1 = Math.floor(group / 10)*10;
+			self.imageGroup2 = group%10;
+			console.log("Maxed! gr1:"+self.imageGroup1/10+", gr2:"+self.imageGroup2 +", "+group);
+		}
 
 		var img = document.getElementById("backimg");
 		img.src = groups[group].background ? groups[group].background : bgimage;
@@ -39,10 +54,56 @@ var AVVX = function ()
 		behavior[2] = new Bzoom(groups[group].images, group, window.innerWidth, window.innerHeight, shuffle, soundPlaying);
 		behavior[3] = new BzoomOut(groups[group].images, group, window.innerWidth, window.innerHeight, shuffle, soundPlaying);
 		behavior[4] = new Bprocessing(sketches[group], group, window.innerWidth, window.innerHeight, shuffle, soundPlaying);
+
+		var visualCredits = groups[group].author;
+		if (behaviorIndex == 4) visualCredits = "";
+		//if (behaviorIndex == 4) visualCredits = this.sketchLoader.sketches[group].author;
 		behavior[behaviorIndex].addHandler();
+		behavior[behaviorIndex].setCredits(visualCredits, credits[2]);
+
 		//workaround to initiate background info:
 		var b = behavior[behaviorIndex];
 		b.textInfo.changeTextA(b.shuffle, b.micInput, backgroundOn);
+	};
+
+	this.onCommand = function(cmd)
+	{
+		switch (cmd)
+		{
+			case 'shuffle':
+				var b = behavior[behaviorIndex];
+				b.shuffle = shuffle = !shuffle;
+				b.textInfo.changeTextA(b.shuffle, b.micInput, backgroundOn);
+				break;
+			case 'background': // todo: fade in/out
+				var b = behavior[behaviorIndex];
+				backgroundOn = !backgroundOn;
+				var img = document.getElementById("backimg");
+				img.style.display = backgroundOn ? "block" : "none";
+				b.textInfo.changeTextA(b.shuffle, b.micInput, backgroundOn);
+				break;
+			case 'textinfo':
+				textVisible = !textVisible;
+				var texinfo = document.getElementById("textInfo");
+				texinfo.style.display = textVisible ? "block" : "none";
+				break;
+			case 'sound':
+				var b = behavior[behaviorIndex];
+				b.soundPlaying = soundPlaying = !soundPlaying;
+				audioEngine.play(soundPlaying);
+				if (!soundPlaying)
+					b.getSoundInfo(0);
+				break;
+			case 'mic':
+				if (!isiPad)
+				{
+					var b = behavior[behaviorIndex];
+					b.micInput = bMic = !bMic;
+					audioEngine.activate("mic", bMic);
+					b.textInfo.changeTextA(b.shuffle, b.micInput, backgroundOn);
+				}
+				break;
+		}
 	};
 
 	this.onTouch = function (e)
@@ -60,50 +121,22 @@ var AVVX = function ()
 			}
 			else
 			{
-				var group = imageGroup1 + imageGroup2;
+				var group = self.imageGroup1 + self.imageGroup2;
 				if (e.dir == "up") group++
 				else if (e.dir == "down") group--;
 				if (group < 0 || group >= groups.length) return;
-				imageGroup1 = group % 10;
-				imageGroup2 = Math.floor(group / 10);
+				self.imageGroup1 = group % 10;
+				self.imageGroup2 = Math.floor(group / 10);
 			}
-			refreshXML(b);
+			self.refreshXML(b);
 		}
 		else if(e.type=="tap"){
-			console.log(e.code);
-			switch(e.code)
-			{
-				case 17: // CONTROL (can't use TAB since it jumps between content and address bar)
-					var b = behavior[behaviorIndex];
-					b.shuffle = shuffle = !shuffle;
-					b.textInfo.changeTextA(b.shuffle, b.micInput,backgroundOn);
-					break;
-				case 16: // SHIFT (todo: fade in/out)
-					var b = behavior[behaviorIndex];
-					backgroundOn = !backgroundOn;
-					var img = document.getElementById("backimg");
-					img.style.display = backgroundOn ? "block" : "none";
-					b.textInfo.changeTextA(b.shuffle, b.micInput, backgroundOn);
-					break;
-				case 32: // SPACE
-					textVisible = !textVisible;
-					var texinfo = document.getElementById("textInfo");
-					texinfo.style.display = textVisible ? "block" : "none";
-					break;
-				case 8: break; // BACKSPACE : was stop sound -- now toggled with ENTER
-				case 13: // ENTER
-					var b = behavior[behaviorIndex];
-					b.soundPlaying = soundPlaying = !soundPlaying;
-					audioEngine.play(soundPlaying);
-					if (!soundPlaying)
-						b.getSoundInfo(0);
-					break;
-			}
-
+			//console.log(e.code);
+			this.onCommand(commands[e.code]);
 		}
-		else behavior[behaviorIndex].touch(e);
-		
+		else behavior[behaviorIndex].touch(e);		
 	}
+
 	this.onAudio = function (averageEnergy)	// between 0..1 and logarithmic
 	{
 		behavior[behaviorIndex].soundLevel = averageEnergy;
@@ -117,64 +150,34 @@ var AVVX = function ()
 		// -- 1234567890
 		if (48 <= keyCode && keyCode <= 57)
 		{
-			imageGroup1 = (keyCode - 48) * 10;
-			imageGroup2 = 0;
-			refreshXML();
+			self.imageGroup1 = (keyCode - 48) * 10;
+			self.imageGroup2 = 0;
+			self.refreshXML();
 		}
-		else switch (keyCode)
+		else
 		{
-			case 17: // CONTROL (can't use TAB since it jumps between content and address bar)
-				var b = behavior[behaviorIndex];
-				b.shuffle = shuffle = !shuffle;
-				b.textInfo.changeTextA(b.shuffle, b.micInput,backgroundOn);
-				break;
-			case 16: // SHIFT (todo: fade in/out)
-				var b = behavior[behaviorIndex];
-				backgroundOn = !backgroundOn;
-				var img = document.getElementById("backimg");
-				img.style.display = backgroundOn ? "block" : "none";
-				b.textInfo.changeTextA(b.shuffle, b.micInput, backgroundOn);
-				break;
-			case 32: // SPACE
-				textVisible = !textVisible;
-				var texinfo = document.getElementById("textInfo");
-				texinfo.style.display = textVisible ? "block" : "none";
-				break;
-			case 8: break; // BACKSPACE : was stop sound -- now toggled with ENTER
-			case 13: // ENTER
-				var b = behavior[behaviorIndex];
-				b.soundPlaying = soundPlaying = !soundPlaying;
-				audioEngine.play(soundPlaying);
-				if (!soundPlaying)
-					b.getSoundInfo(0);
-				break;
-			case 77: // M (Mic)
-				if (!isiPad)
-				{
-					var b = behavior[behaviorIndex];
-					b.micInput = bMic = !bMic;
-					audioEngine.activate("mic", bMic);
-					b.textInfo.changeTextA(b.shuffle, b.micInput, backgroundOn);
-				}
-				break;
-			default:
-				{
-					var char = String.fromCharCode(keyCode);
+			// -- commands
+			if (Object.keys(commands).indexOf(keyCode.toString()) >= 0)
+				this.onCommand(commands[keyCode]);
+			else
+			{
+				var char = String.fromCharCode(keyCode);
 
-					// -- qwertyuiop
-					if (Object.keys(groupKeys).indexOf(char) >= 0)
-					{
-						imageGroup2 = groupKeys[char];
-						refreshXML();
-					}
-					// -- asdfg
-					else if (Object.keys(behaviorKeys).indexOf(char) >= 0)
-					{
-						var index = behaviorKeys[char];
-						refreshXML(index);
-					}
+				// -- qwertyuiop
+				if (Object.keys(groupKeys).indexOf(char) >= 0)
+				{
+					self.imageGroup2 = groupKeys[char];
+					self.refreshXML();
 				}
+				// -- asdfg
+				else if (Object.keys(behaviorKeys).indexOf(char) >= 0)
+				{
+					var index = behaviorKeys[char];
+					self.refreshXML(index);
+				}
+			}
 		}
+
 		e.preventDefault();
 		e.stopPropagation();
 	}
@@ -206,7 +209,7 @@ var AVVX = function ()
 			backgroundOn = true;
 		}
 
-		// -- groups and images (they are small, so load them all
+		// -- groups and images (they are small, so load them all)
 		// -- todo: timeout
 		var xmlgroups = xml.evaluate('/media/group', xml, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 		var groupstoload = xmlgroups.snapshotLength;
@@ -219,14 +222,14 @@ var AVVX = function ()
 				{
 					var defaultBehavior = 3;
 					if (window.location.hash) defaultBehavior = parseInt(window.location.hash.substring(1));
-					if (sketchesLoaded) refreshXML(defaultBehavior);
+					if (sketchesLoaded) self.refreshXML(defaultBehavior);
 				}
 			});
 		}
 
 		// -- processing sketches
 		var xmlsketches = xml.evaluate('/media/sketches', xml, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-		var sketchLoader = new SketchLoader(xmlsketches.singleNodeValue, function (s)
+		this.sketchLoader = new SketchLoader(xmlsketches.singleNodeValue, function (s)
 		{
 			sketches = s;
 			sketchesLoaded = true;
@@ -234,7 +237,7 @@ var AVVX = function ()
 			{
 				var defaultBehavior = 3;
 				if (window.location.hash) defaultBehavior = parseInt(window.location.hash.substring(1));
-				refreshXML(defaultBehavior);
+				self.refreshXML(defaultBehavior);
 			}
 		});
 
@@ -247,7 +250,7 @@ var AVVX = function ()
 		touchUI = new TouchUI();
 		audioEngine = new AudioEngine();
 		loadXML();
-		document.addEventListener("keydown", onKey);
+		document.addEventListener("keydown", onKey.bind(self));
 	};
 
 	init();

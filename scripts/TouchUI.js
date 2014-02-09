@@ -34,6 +34,30 @@ var TouchUI = function ()
 			if(x>window.innerWidth*(6/7) && x<window.innerWidth && y>0 && y<40) params.code = 13; //top right corner - mp3 start/pause
 			if(x>0 && x<window.innerWidth*(1/7) && y>window.innerHeight-40 && y<window.innerHeight) params.code = 17; //bottom left corner - shuffle on/off
 			if(x>window.innerWidth*(6/7) && x<window.innerWidth && y>window.innerHeight-40 && y<window.innerHeight) params.code = 16; //bottom right corner - background on/off
+			if(x>window.innerWidth-40 && x< window.innerWidth && y>40 && y<window.innerHeight-40){
+				var bID = Math.floor(y/(window.innerHeight/12))-1;
+				avvx.imageGroup2=bID;
+				avvx.refreshXML();
+			}
+			if(x>0 && x< 40 && y>40 && y<window.innerHeight-40){
+				console.log(Math.floor(y/(window.innerHeight/12))-1);
+				if(Math.floor(y/(window.innerHeight/12))-1<5){
+					var bID = Math.floor(y/(window.innerHeight/12))-1;
+					avvx.refreshXML(bID);
+				}
+			}
+
+		}
+		else if (e.type == "hold")
+		{
+			var x = e.gesture.center.pageX;
+			var y = e.gesture.center.pageY;
+			if(x>window.innerWidth-40 && x< window.innerWidth && y>40 && y<window.innerHeight-40){
+				console.log("long!");
+				var bID = Math.floor(y/(window.innerHeight/12))-1;
+				avvx.imageGroup1=bID*10;
+				avvx.refreshXML();
+			}
 		}
 		else if (e.type == "swipe")
 		{
@@ -56,11 +80,31 @@ var TouchUI = function ()
 		avvx.onTouch(params);
 	};
 
+	// -- buttons right
+	var rbuttons = document.querySelectorAll(".rbutton");
+	for (var i = 0; i < rbuttons.length; i++)
+	{
+		var rbutton = rbuttons[i];
+		rbutton.style.left = window.innerWidth-40;
+		rbutton.style.top = window.innerHeight/12*(i+1);
+	}
+
+	// -- buttons left
+	var lbuttons = document.querySelectorAll(".lbutton");
+	for (var j = 0; j < lbuttons.length; j++)
+	{
+		var lbutton = lbuttons[j];
+		lbutton.style.left = 0;
+		lbutton.style.top = window.innerHeight/12*(j+1);
+	}
+
+
 	// -- surface catches taps and swipes
 	// -- removed transform for the moment, since it seems to slow things down
 	var surface = document.body; // getElementById("touchSurface");
-	var hammerG = Hammer(surface, { hold: false, swipe_max_touches: 2, swipe_velocity: 0.7 });
-	hammerG.on("tap swipe", onGesture);	// transform
+	//var hammerG = Hammer(surface, { hold: false, swipe_max_touches: 2, swipe_velocity: 0.7 });
+	var hammerG = Hammer(surface, { swipe_max_touches: 2, swipe_velocity: 0.7 });
+	hammerG.on("tap swipe hold", onGesture);	// transform
 
 	// -- sliders
 	var sliders = document.querySelectorAll(".slider");
@@ -72,6 +116,7 @@ var TouchUI = function ()
 		var hammerS = Hammer(slider, { hold: false, drag_min_distance: 5, drag_max_touches: 0 });
 		hammerS.on("drag dragend", onSlider);
 	}
+
 
 	document.addEventListener("touchmove", function (e) { e.preventDefault(); }, false)
 };

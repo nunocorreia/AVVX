@@ -64,7 +64,7 @@
 </group>
 
 	<sketches>
-		<!--sketch id="0" url="http://www.openprocessing.org/sketch/74380">slash.pde</sketch-->
-		<!--sketch id="1" author="Janos Erdos Jr." url="">spiral.pde</sketch-->
+		<sketch id="0" url="http://www.openprocessing.org/sketch/74380">slash.pde</sketch>
+		<sketch id="1" author="Janos Erdos Jr." url="">spiral.pde</sketch>
 	</sketches>
 </media>

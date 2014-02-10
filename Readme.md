@@ -3,3 +3,5 @@ AVVX (Audio Visual Vector eXchange) is a visual sequencer for VJing and audiovis
 AVVX information / instructions: www.avvx.org
 
 released under MIT license http://opensource.org/licenses/MIT
+
+v06

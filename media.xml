@@ -63,8 +63,8 @@
 <image>4.svg</image>
 </group>
 
-	<!--sketches>
+	<sketches>
 		<sketch id="0" url="http://www.openprocessing.org/sketch/74380">slash.pde</sketch>
 		<sketch id="1" author="Janos Erdos Jr." url="">spiral.pde</sketch>
-	</sketches-->
+	</sketches>
 </media>

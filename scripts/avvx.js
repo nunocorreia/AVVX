@@ -3,7 +3,7 @@ var AVVX = function ()
 {
 	var groupKeys = { 'Q': 0, 'W': 1, 'E': 2, 'R': 3, 'T': 4, 'Y': 5, 'U': 6, 'I': 7, 'O': 8, 'P': 9 };
 	var behaviorKeys = { 'A': 0, 'S': 1, 'D': 2, 'F': 3, 'G': 4 };
-	var behavior = [0, 0, 0, 0];
+	var behavior = [0, 0, 0, 0, 0];
 	var credits = [];
 	var groups = [];
 	var sketches = [];
@@ -48,7 +48,12 @@ var AVVX = function ()
 
 		if (behaviorIndex >= 0)
 			behavior[behaviorIndex].removeHandler();
-		if (newindex != undefined) behaviorIndex = newindex;
+		if (newindex != undefined) 
+		{
+			if (newindex == behavior.length-1 && !hasSketches);
+			else behaviorIndex = newindex;
+		}
+
 
 		behavior[0] = new Btrail(groups[group].images, group, window.innerWidth, window.innerHeight, shuffle, soundPlaying);
 		behavior[1] = new Bslide(groups[group].images, group, window.innerWidth, window.innerHeight, shuffle, soundPlaying);

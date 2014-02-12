@@ -11,6 +11,7 @@ var AVVX = function ()
 	var touchUI;
 	var audioEngine;
 	var self = this;
+	var hasSketches = false;
 
 	// command mapping
 	// 08 = BACKSPACE (not used: sound is now toggled with ENTER)
@@ -53,11 +54,13 @@ var AVVX = function ()
 		behavior[1] = new Bslide(groups[group].images, group, window.innerWidth, window.innerHeight, shuffle, soundPlaying);
 		behavior[2] = new Bzoom(groups[group].images, group, window.innerWidth, window.innerHeight, shuffle, soundPlaying);
 		behavior[3] = new BzoomOut(groups[group].images, group, window.innerWidth, window.innerHeight, shuffle, soundPlaying);
-		behavior[4] = new Bprocessing(sketches[group], group, window.innerWidth, window.innerHeight, shuffle, soundPlaying);
 
 		var visualCredits = groups[group].author;
-		if (behaviorIndex == 4) visualCredits = "";
-		//if (behaviorIndex == 4) visualCredits = this.sketchLoader.sketches[group].author;
+		if (hasSketches && behaviorIndex == 4)	// bugfix
+		{
+			behavior[4] = new Bprocessing(sketches[group], group, window.innerWidth, window.innerHeight, shuffle, soundPlaying);
+			visualCredits = this.sketchLoader.sketches[group].author;
+		}
 		behavior[behaviorIndex].addHandler();
 		behavior[behaviorIndex].setCredits(visualCredits, credits[2]);
 
@@ -229,7 +232,16 @@ var AVVX = function ()
 
 		// -- processing sketches
 		var xmlsketches = xml.evaluate('/media/sketches', xml, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-		this.sketchLoader = new SketchLoader(xmlsketches.singleNodeValue, function (s)
+
+		hasSketches = xmlsketches.singleNodeValue != null;
+		if (!hasSketches)
+		{
+			sketchesLoaded = true;
+			behaviorKeys['G'] = undefined;
+		}
+		else
+
+		self.sketchLoader = new SketchLoader(xmlsketches.singleNodeValue, function (s)
 		{
 			sketches = s;
 			sketchesLoaded = true;

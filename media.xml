@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<media sound="Coden-AVOL1-edit.mp3" soundauthor="Coden" soundurl="http://www.nunocorreia.com/c/music" bgimage="images/background.svg">
+<media sound="Coden-AVOL1-edit.mp3" soundauthor="Coden" soundurl="http://www.nunocorreia.com/c/music" bgimage="images/background3.svg">
 
 <group id="0" author="Nuno" url="http://www.nunocorreia.com" >
 <image>shape2.svg</image>
@@ -9,18 +9,18 @@
 <image>spikes2.svg</image>
 </group>
 
-<group id="1" author="" url="" bgimage="images/background2.svg">
+<group id="1" author="" url="">
 <image>shape.svg</image>
 <image>hexa.svg</image>
 <image>star.svg</image>
 <image>spikes.svg</image>
 </group>
 
-<group id="2" author="" url="" bgimage="images/background3.svg">
+<group id="2" author="" url="" bgimage="images/background2.svg">
 <image>star.svg</image>
 </group>
 
-<group author="Nuno Correia" url="http://www.nunocorreia.com">
+<group author="Nuno Correia" url="http://www.nunocorreia.com" bgimage="images/background.svg">
 <image>shape2.svg</image>
 </group>
 
@@ -63,8 +63,8 @@
 <image>4.svg</image>
 </group>
 
-	<sketches>
+	<!--sketches>
 		<sketch id="0" url="http://www.openprocessing.org/sketch/74380">slash.pde</sketch>
 		<sketch id="1" author="Janos Erdos Jr." url="">spiral.pde</sketch>
-	</sketches>
+	</sketches-->
 </media>

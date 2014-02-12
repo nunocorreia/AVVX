@@ -150,21 +150,21 @@
 			{
 				case 1:// down
 					posX = Math.random() * window.innerWidth - (window.innerWidth - svgwidth) / 2;
-					posY = -(window.innerHeight * 5 + Math.random() * window.innerHeight * 5);
+					posY = - window.innerHeight*0.5 - Math.random() * window.innerHeight * 8;
 					directionText = "down";
 					break;
 				case 2:// up
 					posX = Math.random() * window.innerWidth - (window.innerWidth - svgwidth) / 2;;
-					posY = window.innerHeight * 5 + Math.random() * window.innerHeight * 5;
+					posY = window.innerHeight*0.5 + Math.random() * window.innerHeight * 8;
 					directionText = "up";
 					break;
 				case 3:// left
-					posX = window.innerWidth * 5 + Math.random() * window.innerWidth * 3;
+					posX = window.innerWidth*0.5 + Math.random() * window.innerWidth * 6;
 					posY = Math.random() * window.innerHeight - (window.innerHeight - svgheight) / 2;;
 					directionText = "left";
 					break;
 				case 4:// right
-					posX = -(window.innerWidth * 5 + Math.random() * window.innerWidth * 3);
+					posX = -window.innerWidth*0.5 - Math.random() * window.innerWidth * 6;
 					posY = Math.random() * window.innerHeight - (window.innerHeight - svgheight) / 2;;
 					directionText = "right";
 					break;

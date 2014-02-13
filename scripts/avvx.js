@@ -1,6 +1,7 @@
 ﻿
 var AVVX = function ()
 {
+	var xmlURL = "media.xml";
 	var groupKeys = { 'Q': 0, 'W': 1, 'E': 2, 'R': 3, 'T': 4, 'Y': 5, 'U': 6, 'I': 7, 'O': 8, 'P': 9 };
 	var behaviorKeys = { 'A': 0, 'S': 1, 'D': 2, 'F': 3, 'G': 4 };
 	var behavior = [0, 0, 0, 0, 0];
@@ -20,7 +21,8 @@ var AVVX = function ()
 	// 17 = CONTROL (can't use TAB since it jumps between content and address bar)
 	// 32 = SPACE
 	// 77 = M
-	var commands = { 8: 'obsolete', 13: 'sound', 16: 'background', 17: 'shuffle', 32: 'textinfo', 77: 'mic' };
+	// 76 = L
+	var commands = { 8: 'obsolete', 13: 'sound', 16: 'background', 17: 'shuffle', 32: 'textinfo', 77: 'mic', 76:'uitoggle' };
 
 	this.imageGroup1 = this.imageGroup2 = 0;
 	var behaviorIndex = -1;
@@ -111,6 +113,11 @@ var AVVX = function ()
 					b.textInfo.changeTextA(b.shuffle, b.micInput, backgroundOn);
 				}
 				break;
+			case 'uitoggle':
+				var ui = document.getElementById("touchSurface");
+				if (ui.style.display == "none") ui.style.display = "block";
+				else ui.style.display = "none";
+				break;
 		}
 	};
 
@@ -139,6 +146,10 @@ var AVVX = function ()
 			self.refreshXML(b);
 		}
 		else if(e.type=="tap"){
+			//console.log(e.code);
+			this.onCommand(commands[e.code]);
+		}
+		else if(e.type=="hold"){
 			//console.log(e.code);
 			this.onCommand(commands[e.code]);
 		}
@@ -194,7 +205,7 @@ var AVVX = function ()
 	{
 		// -- get media.xml (synchronous)
 		var xhr = new XMLHttpRequest();
-		xhr.open("get", "media.xml", false);
+		xhr.open("get", xmlURL, false);
 		xhr.overrideMimeType("text/xml");
 		xhr.send(null);
 		if (xhr.status != 200)

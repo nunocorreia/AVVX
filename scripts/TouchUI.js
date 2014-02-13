@@ -58,6 +58,8 @@ var TouchUI = function ()
 				avvx.imageGroup1=bID*10;
 				avvx.refreshXML();
 			}
+			if(x>window.innerWidth*(6/7) && x<window.innerWidth && y>0 && y<40) params.code = 77; //top right corner - mic on/off
+			if(x>0 && x<window.innerWidth*(1/7) && y>0 && y<40) params.code = 76; //top left corner - UI on/off
 		}
 		else if (e.type == "swipe")
 		{

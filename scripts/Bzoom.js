@@ -17,6 +17,7 @@
 	var indexMC = 0;
 	var seqCounter = 0;
 	var distCenter = 100;
+	var zspeed = 0.05;
 
 	var self = this;
 	Behavior.call(this, "Zoom", images, group, w, h, shuffle, soundPlaying);
@@ -65,7 +66,6 @@
 		{
 			emptyMC[i].scaleX = normalScale[i];
 			emptyMC[i].scaleY = normalScale[i];
-			var zspeed = 0.05;
 			emptyMC[i].scaleX += zspeed;
 			emptyMC[i].scaleY += zspeed;
 			normalScale[i] = emptyMC[i].scaleX;
@@ -147,8 +147,12 @@
 			case 40: angle -= 1; break; // down
 			case 37: if (maxFrame > 6) maxFrame -= 6; break; // left
 			case 39: if (maxFrame < 150) maxFrame += 6; break; // right
-			case 90: if (distCenter > 1) distCenter -= 10; break; // Z
-			case 88: if (distCenter < 500) distCenter += 10; break; // X
+			case 88: zspeed+=0.1; break; // X
+			case 90: if (zspeed > 0) zspeed-=0.1; break; // Z
+			case 86: if (distCenter > 1) distCenter -= 10; break  // v
+			case 67: if (distCenter < 500) distCenter += 10; break;  // c
+
+
 			default: return false;
 		}
 		else if (type == "slider")
@@ -170,6 +174,13 @@
 			// slider #3
 			else if (param.id == "s3")
 			{
+				var value = param.value / 100;
+				if (value != zspeed) zspeed = value;
+				else return false;	// no need to change text
+			}
+			// slider #4
+			else if (param.id == "s4")
+			{
 				var value = Math.round(500 * (param.value / 100));
 				if (value != distCenter) distCenter = value;
 				else return false;	// no need to change text
@@ -182,7 +193,7 @@
 	this.updateText = function ()
 	{
 		var maxSec = (maxFrame / 60).toFixed(1);
-		this.textInfo.changeTextB(["rotation: " + angle, "timer: " + maxSec + "s", "decenter: "+distCenter]);
+		this.textInfo.changeTextB(["rotation: " + angle, "timer: " + maxSec + "s", "speed: "+zspeed, "decenter: "+distCenter]);
 	};
 };
 Bzoom.prototype = Object.create(Behavior.prototype);

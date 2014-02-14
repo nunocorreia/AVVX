@@ -29,7 +29,8 @@ body { overflow: hidden; background-color: transparent; }
 
 a { color:#ccc; cursor:pointer; }
 button { pointer-events:all; padding: 5px; background-color:rgba(255,255,255,0.5); border: 1px; margin-top:5px; outline:none; }
-div,canvas { pointer-events: none; }
+div { pointer-events: all; }
+canvas { pointer-events: none; }
 
 #touchSurface {
 	pointer-events: all;

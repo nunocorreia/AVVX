@@ -95,6 +95,14 @@
 			counter = 0;
 			zoomRefresh();
 		}
+		//audio reactive background if shuffle is on
+		var img = document.getElementById("backimg");
+		if (self.shuffle){
+			img.style.webkitTransform = "scale(" + 2 * this.soundLevel + 1 +"," + 2 * this.soundLevel + 1 +")";
+		}else{
+			img.style.webkitTransform = "scale(1,1)";
+		}
+
 	}
 
 	var zoomRefresh = function ()

@@ -70,8 +70,6 @@
 			trailer.style.left = 0;
 			trailer.style.top = 0;
 			
-			console.log(parseInt(trailer.getAttribute("width")));
-
 			var newPosX=posX - (800 - parseInt(trailer.getAttribute("width")))/2
 			var newPosY=posY - (600 - parseInt(trailer.getAttribute("height")))/2
 			var xform = "translate(" + newPosX + " " + newPosY + ")";
@@ -84,7 +82,6 @@
 			container.appendChild(trailer);
 			this.updateLayers();
 			trailers.push(trailer);
-			//console.log(trailer.getAttribute("width"));
 
 			if (++depth >= depthMax)
 				depth = 0;
@@ -102,6 +99,15 @@
 		angleSum += angle;
 
 		counter++;
+
+		//audio reactive background if shuffle is on
+		var img = document.getElementById("backimg");
+		if (this.shuffle){
+			img.style.webkitTransform = "scale(" + 2 * this.soundLevel + 1 +"," + 2 * this.soundLevel + 1 +")";
+		}else{
+			img.style.webkitTransform = "scale(1,1)";
+		}
+
 	};
 
 	var changeDirectionX = function () { speedX = Math.random() * 3.5 + 1.5; };

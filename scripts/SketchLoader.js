@@ -30,7 +30,9 @@ var SketchLoader = function (xmlsketches, onloaded)
 			self.sketches.push(pde);
 			if (--loadcount <= 0) onloaded(self.sketches);
 		};
-		xhr.open("get", "sketches/" + pdefile, true);
+
+		// 2014-04-14
+		xhr.open("get", avvx.mediapath + "sketches/" + pdefile, true);
 		xhr.send(null);
 	});
 };

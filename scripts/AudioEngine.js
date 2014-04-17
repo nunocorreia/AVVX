@@ -18,7 +18,7 @@ var AudioEngine = function ()
 		analyserNode.maxDecibels = 0;
 		if (soundfile)
 		{
-			audioElement.src = "sounds/" + soundfile;
+			audioElement.src = avvx.mediapath + "sounds/" + soundfile; // 2014-04-14
 			elementNode = audioContext.createMediaElementSource(audioElement);
 			elementNode.connect(analyserNode);
 			analyserNode.connect(scriptNode);

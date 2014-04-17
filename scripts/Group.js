@@ -9,6 +9,7 @@ var Group = function (xmlgroup, onloaded)
 	this.author = xmlgroup.getAttribute("author");
 	var url = xmlgroup.getAttribute("url");
 	self.background = xmlgroup.getAttribute("bgimage");
+	if (self.background) self.background = avvx.mediapath + self.background;	// 2014-04-14
 
 	var svgstoload = [];
 	for (var i = 0; i < xmlgroup.childNodes.length; i++)
@@ -35,7 +36,9 @@ var Group = function (xmlgroup, onloaded)
 			document.body.appendChild(div); */
 			if (--loadcount <= 0) onloaded(self);
 		};
-		xhr.open("get", "images/" + svgfile, true);
+
+		// 2014-04-14
+		xhr.open("get", avvx.mediapath + "images/" + svgfile, true);
 		xhr.send(null);
 	});
 };

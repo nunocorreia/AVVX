@@ -1,7 +1,6 @@
 ﻿
 var AVVX = function ()
 {
-	var xmlURL = "media.xml";
 	var groupKeys = { 'Q': 0, 'W': 1, 'E': 2, 'R': 3, 'T': 4, 'Y': 5, 'U': 6, 'I': 7, 'O': 8, 'P': 9 };
 	var behaviorKeys = { 'A': 0, 'S': 1, 'D': 2, 'F': 3, 'G': 4 };
 	var behavior = [0, 0, 0, 0, 0];
@@ -222,6 +221,7 @@ var AVVX = function ()
 		bgimage = media.getAttribute("bgimage");
 		if (bgimage)
 		{
+			bgimage = avvx.mediapath + bgimage; // 2014-04-14
 			var img = document.getElementById("backimg");
 			img.src = bgimage;
 			img.style.display = "block";
@@ -240,7 +240,6 @@ var AVVX = function ()
 				if (--groupstoload <= 0)
 				{
 					var defaultBehavior = 3;
-					if (window.location.hash) defaultBehavior = parseInt(window.location.hash.substring(1));
 					if (sketchesLoaded) self.refreshXML(defaultBehavior);
 				}
 			});
@@ -264,7 +263,6 @@ var AVVX = function ()
 			if (groupstoload <= 0)
 			{
 				var defaultBehavior = 3;
-				if (window.location.hash) defaultBehavior = parseInt(window.location.hash.substring(1));
 				self.refreshXML(defaultBehavior);
 			}
 		});
@@ -281,14 +279,24 @@ var AVVX = function ()
 		document.addEventListener("keydown", onKey.bind(self));
 	};
 
+	// 2014-04-14
+	avvx = this;
+	var author = window.location.hash;
+	if (author)
+	{
+		author = author.substring(1);
+		avvx.mediapath = "../library/" + author + "/";
+	}
+	else avvx.mediapath = "./";
+	var xmlURL = avvx.mediapath + "media.xml";
+
 	init();
 	return this;
 }
 
-var avvx;
 function avvxinit()
 {
-	avvx = new AVVX();
+	new AVVX();
 }
 
 

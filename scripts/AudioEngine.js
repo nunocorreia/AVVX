@@ -9,7 +9,7 @@ var AudioEngine = function ()
 
 	this.init = function (soundfile)
 	{
-		audioContext = new webkitAudioContext();
+		audioContext = new (AudioContext||webkitAudioContext)();
 		analyserNode = audioContext.createAnalyser();
 		scriptNode = audioContext.createScriptProcessor(buffersize, 1, 1);
 		scriptNode.onaudioprocess = onProcess;
